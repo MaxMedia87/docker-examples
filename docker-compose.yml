@@ -4,6 +4,22 @@ services:
     build:
       context: frontend/docker/develop/nginx
     ports:
-    - "${PORT}:80"
+    - "${PORT_FRONT}:80"
     volumes:
     - ./frontend:/app
+
+  api:
+    build:
+      context: api/docker/develop/nginx
+    ports:
+    - "${PORT_API}:80"
+    volumes:
+    - ./api:/app
+    depends_on:
+      - api-php-fpm
+
+  api-php-fpm:
+    build:
+      context: api/docker/develop/php-fpm
+    volumes:
+    - ./api:/app
